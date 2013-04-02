@@ -29,4 +29,6 @@ void alloc_buffer(wave_buffer * buf);
 /*free a buffer*/
 void free_buffer(wave_buffer * buf);
 
+/*this function mix two or more wave buffers*/
+void mix_wave_buffers(wave_buffer * wav1,wave_buffer ** mix,int start);
 

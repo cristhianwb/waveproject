@@ -1,4 +1,5 @@
 #include "wave_buffer.h"
+#include <stdarg.h>
 
 void init_buffer(wave_buffer * buf,short int channels,int sample_rate,short int bit_sample,long int size){
 	if (buf == NULL)
@@ -68,5 +69,32 @@ void free_buffer(wave_buffer * buf){
 	if (buf == NULL)
 		return;
 	free(buf->buffer);
+}
+/*mix two or more buffers, the paramter start specifies were the buffers will start to be mixed in the first buffer*/
+void mix_wave_buffers(wave_buffer * wav1,wave_buffer ** mix,int start){
+	int i,j,sample;
+	long int max_size = 0;
+	wave_buffer ** tmp = mix;
+	
+	if (wav1 == NULL || tmp == NULL || *tmp == NULL)
+		return;
+		
+	if (start >= wav1->size)
+		return;
+		
+	max_size = (*tmp++)->size;
+	for (; *tmp != NULL;tmp++){
+		if ((*tmp)->size > max_size)
+			max_size = (*tmp)->size;			
+	}
+	
+	for (i = 0; i < max_size,(i+start) < wav1->size;i++){
+		for (tmp = mix,j = 0,sample = wav1->buffer[i+start]; *tmp != NULL;tmp++,j++)	{
+			if (i < (*tmp)->size)
+				sample += (*tmp)->buffer[i+start];				
+		}
+		wav1->buffer[i+start] = sample / (j+1);			
+	}
+		
 }
 

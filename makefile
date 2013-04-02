@@ -8,3 +8,6 @@ OBJ = test_wave.o wave.o wave_buffer.o
 
 test: $(OBJ)
 	gcc -o $@ $^ $(CFLAGS)
+	
+clean: 
+	rm *.o test *.~
